@@ -16,8 +16,6 @@ const Window = ({ title, children, content, onClose, theme, position, zIndex, is
 
   const handleMaximize = () => {
     if (!isMaximized && windowRef.current) {
-      const element = windowRef.current.resizableElement.current;
-      const rect = element.getBoundingClientRect();
       setIsMaximized(true);
     } else {
       setIsMaximized(false);

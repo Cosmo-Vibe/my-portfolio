@@ -1,5 +1,5 @@
 import React from 'react';
-import { WindowsLogo, SystemIcons } from './WindowsIcons';
+import { WindowsLogo } from './WindowsIcons';
 
 const Taskbar = ({ 
   apps, 

@@ -140,14 +140,12 @@ function App() {
   };
 
   const focusWindow = (title) => {
-    setWindows(prev => {
-      const maxZ = Math.max(...prev.map(w => w.zIndex || 0));
-      return prev.map(w => ({
-        ...w,
-        zIndex: w.title === title ? maxZ + 1 : w.zIndex,
-        isMinimized: w.title === title ? false : w.isMinimized
-      }));
-    });
+    setMaxZIndex(prev => prev + 1);
+    setWindows(prev => prev.map(w => ({
+      ...w,
+      zIndex: w.title === title ? maxZIndex + 1 : w.zIndex,
+      isMinimized: w.title === title ? false : w.isMinimized
+    })));
     setActiveWindow(title);
   };
 
