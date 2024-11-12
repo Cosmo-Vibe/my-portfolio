@@ -1,4 +1,8 @@
 .App {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--win-background);
   text-align: center;
 }
 
@@ -38,10 +42,17 @@
 }
 
 .desktop {
+  height: calc(100vh - 48px);
+  padding: 16px;
   position: relative;
   width: 100%;
-  height: calc(100vh - 50px); /* Adjust height for taskbar */
-  background-color: #282c34;
+}
+
+.icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
 }
 
 .taskbar {
@@ -53,4 +64,30 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+/* Theme variables */
+.App.light {
+  --win-background: #f0f0f0;
+  --win-text: #000000;
+  --win-window-bg: #ffffff;
+  --win-border: #e0e0e0;
+  --win-hover: rgba(0, 0, 0, 0.1);
+}
+
+.App.dark {
+  --win-background: #1f1f1f;
+  --win-text: #ffffff;
+  --win-window-bg: #2d2d2d;
+  --win-border: #404040;
+  --win-hover: rgba(255, 255, 255, 0.1);
+}
+
+.desktop-icon {
+  color: var(--win-text);
+}
+
+.window-content {
+  background-color: var(--win-window-bg);
+  color: var(--win-text);
 }
