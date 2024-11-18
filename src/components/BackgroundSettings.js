@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 const defaultBackgrounds = [
-  { type: 'image', url: '/backgrounds/default1.jpg', label: 'Default 1' },
-  { type: 'image', url: '/backgrounds/default2.jpg', label: 'Default 2' },
+  { type: 'image', url: `${process.env.PUBLIC_URL}/backgrounds/default1.jpg`, label: 'Default 1' },
+  { type: 'image', url: `${process.env.PUBLIC_URL}/backgrounds/default2.jpg`, label: 'Default 2' },
   { 
     type: 'video',
     url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
