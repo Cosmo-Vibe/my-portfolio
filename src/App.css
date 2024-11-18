@@ -46,14 +46,25 @@
   padding: 16px;
   position: relative;
   width: 100%;
+  overflow: hidden; /* Prevent icons from leaving container */
+  isolation: isolate; /* Create stacking context */
+  background: transparent;
+  z-index: 1;
 }
 
 .icons-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
   padding: 16px;
+  width: fit-content;
+  position: relative;
+  z-index: 2; /* Ensure icons are above background */
+  pointer-events: auto; /* Ensure clicks reach the icons */
 }
+
+/* Remove the .icons-grid class as it's no longer needed */
 
 .taskbar {
   position: fixed;
@@ -64,6 +75,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  z-index: 10000; /* Ensure taskbar is always on top */
 }
 
 /* Theme variables */
@@ -76,18 +88,37 @@
 }
 
 .App.dark {
-  --win-background: #1f1f1f;
+  --win-background: #2d2d2d;
   --win-text: #ffffff;
-  --win-window-bg: #2d2d2d;
+  --win-window-bg: #3d3d3d;
   --win-border: #404040;
   --win-hover: rgba(255, 255, 255, 0.1);
 }
 
+.App.dark .desktop-icon span,
+.App.dark .window-content {
+  color: var(--win-text) !important;
+}
+
+:root {
+  --font-segoe: 'Segoe UI', system-ui, sans-serif;
+  --font-arial: Arial, sans-serif;
+  --font-helvetica: Helvetica, Arial, sans-serif;
+}
+
 .desktop-icon {
   color: var(--win-text);
+  font-size: var(--font-size, 14px);
+}
+
+.desktop-icon svg {
+  width: var(--icon-size, 48px);
+  height: var(--icon-size, 48px);
 }
 
 .window-content {
   background-color: var(--win-window-bg);
   color: var(--win-text);
+  position: relative; /* For folder icon containers */
+  min-height: 100px;
 }

@@ -3,6 +3,8 @@ import './App.css';
 import Window from './components/Window';
 import Taskbar from './components/Taskbar';
 import DesktopIcon from './components/DesktopIcon';
+import Settings from './components/Settings';
+import Background from './components/Background';
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -15,6 +17,15 @@ function App() {
   ]);
   const [activeWindow, setActiveWindow] = useState(null);
   const [maxZIndex, setMaxZIndex] = useState(1);
+  const [background, setBackground] = useState({
+    type: 'image',
+    url: '/backgrounds/default1.jpg'
+  });
+  const [config, setConfig] = useState({
+    fontFamily: 'segoe',
+    fontSize: 14,
+    iconSize: 48
+  });
 
   const folderStructure = {
     'This PC': {
@@ -78,9 +89,37 @@ function App() {
     }
   };
 
+  const handleConfigChange = (key, value) => {
+    setConfig(prev => ({ ...prev, [key]: value }));
+  };
+
   const openWindow = (app, parentPosition = null) => {
     if (app.title === 'Browser') {
       window.open('https://www.google.com', '_blank');
+      return;
+    }
+
+    if (app.title === 'Settings') {
+      const newWindow = {
+        title: 'Settings',
+        type: 'settings',
+        icon: '⚙️',
+        position: { x: 100, y: 50, width: 800, height: 600 },
+        zIndex: Math.max(...windows.map(w => w.zIndex || 0)) + 1,
+        isMinimized: false,
+        content: (
+          <Settings
+            theme={theme}
+            onThemeChange={setTheme}
+            onBackgroundChange={handleBackgroundChange}
+            currentBackground={background}
+            config={config}
+            onConfigChange={handleConfigChange}
+          />
+        )
+      };
+      setWindows(prev => [...prev, newWindow]);
+      setActiveWindow('Settings');
       return;
     }
 
@@ -177,8 +216,17 @@ function App() {
     setActiveWindow(prev => prev === title ? null : title);
   };
 
+  const handleBackgroundChange = (newBackground) => {
+    setBackground(newBackground);
+  };
+
   return (
-    <div className={`App ${theme}`}>
+    <div className={`App ${theme}`} style={{ 
+      '--icon-size': `${config.iconSize}px`,
+      '--font-size': `${config.fontSize}px`,
+      fontFamily: `var(--font-${config.fontFamily})`
+    }}>
+      <Background background={background} />
       <div className="desktop">
         <div className="icons-container">
           <DesktopIcon 
@@ -228,7 +276,14 @@ function App() {
               </button>
             ))}
             <hr className="border-white/20 my-2" />
-            <button className="w-full text-left px-4 py-2 hover:bg-white/10 rounded">
+            <button 
+              className="w-full text-left px-4 py-2 hover:bg-white/10 rounded flex items-center"
+              onClick={() => {
+                openWindow({ title: 'Settings', type: 'settings', icon: '⚙️' });
+                setIsStartMenuOpen(false);
+              }}
+            >
+              <span className="mr-2">⚙️</span>
               Settings
             </button>
           </div>

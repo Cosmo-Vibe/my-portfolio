@@ -4,6 +4,7 @@ import { WindowControls } from './WindowsIcons';
 
 const Window = ({ title, children, content, onClose, theme, position, zIndex, isActive, onFocus }) => {
   const [isMaximized, setIsMaximized] = useState(false);
+  const [preMaximizeState, setPreMaximizeState] = useState(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const windowRef = useRef(null);
 
@@ -14,16 +15,46 @@ const Window = ({ title, children, content, onClose, theme, position, zIndex, is
     height: 300
   };
 
+  React.useEffect(() => {
+    if (isActive && isMinimized) {
+      setIsMinimized(false);
+    }
+  }, [isActive, isMinimized]);
+
   const handleMaximize = () => {
     if (!isMaximized && windowRef.current) {
+      // Get the actual DOM element
+      const element = windowRef.current.resizableElement.current;
+      const rect = element.getBoundingClientRect();
+      
+      setPreMaximizeState({
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height
+      });
       setIsMaximized(true);
     } else {
       setIsMaximized(false);
+      // Restore previous position and size if available
+      if (preMaximizeState && windowRef.current) {
+        windowRef.current.updatePosition({ 
+          x: preMaximizeState.x, 
+          y: preMaximizeState.y 
+        });
+        windowRef.current.updateSize({ 
+          width: preMaximizeState.width, 
+          height: preMaximizeState.height 
+        });
+      }
     }
   };
 
   const handleMinimize = () => {
-    setIsMinimized(!isMinimized);
+    setIsMinimized(true);
+    if (onFocus) {
+      onFocus(false); // Notify parent that window is no longer active
+    }
   };
 
   return (
@@ -32,11 +63,15 @@ const Window = ({ title, children, content, onClose, theme, position, zIndex, is
       default={defaultPosition}
       style={{ 
         display: isMinimized ? 'none' : 'block',
-        zIndex: isActive ? 9999 : zIndex || 1
+        zIndex: isMaximized ? 9998 : (isActive ? 9997 : zIndex || 1) // Keep below taskbar
       }}
       onMouseDown={() => onFocus && onFocus()}
-      size={isMaximized ? { width: '100%', height: 'calc(100vh - 48px)' } : undefined}
+      size={isMaximized ? { 
+        width: window.innerWidth,
+        height: window.innerHeight - 48 // Subtract taskbar height
+      } : undefined}
       position={isMaximized ? { x: 0, y: 0 } : undefined}
+      disableDragging={isMaximized}
       minWidth={200}
       minHeight={100}
       bounds="window"
@@ -51,7 +86,7 @@ const Window = ({ title, children, content, onClose, theme, position, zIndex, is
         bottomLeft: { cursor: 'sw-resize' },
         topLeft: { cursor: 'nw-resize' }
       }}
-      enableResizing={{
+      enableResizing={isMaximized ? false : {
         top: true,
         right: true,
         bottom: true,

@@ -6,11 +6,13 @@ const DesktopIcon = ({ icon, label, onDoubleClick }) => {
   
   return (
     <div 
-      className="flex flex-col items-center m-4 p-2 hover:bg-black/5 rounded"
+      className="flex flex-col items-center p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded cursor-pointer"
       onDoubleClick={onDoubleClick}
     >
       <Icon />
-      <span className="text-sm mt-1 text-center text-win-text">{label}</span>
+      <span className="text-sm mt-1 text-center text-inherit select-none break-words">
+        {label}
+      </span>
     </div>
   );
 };

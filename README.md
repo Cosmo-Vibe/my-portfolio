@@ -137,7 +137,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📬 Contact
 
-N Dramsy Shahm - your.email@example.com Project Link: https://github.com/yourusername/windows-portfolio
+N Dramsy Shahm - cosmo_sama@outlook.com Project Link: https://github.com/Cosmo-Vibe/my-portfolio
 
 ## 🙏 Acknowledgments
 
