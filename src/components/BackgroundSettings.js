@@ -33,8 +33,8 @@ const BackgroundSettings = ({ onSelectBackground, currentBackground }) => {
 
   const getVideoEmbedUrl = (url, type) => {
     if (type === 'youtube') {
-      const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-      const match = url.match(youtubeRegex);
+      const youtubeUrlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+/;
+      const match = url.match(youtubeUrlPattern);
       if (match) {
         return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&controls=0&loop=1&playlist=${match[1]}`;
       }
